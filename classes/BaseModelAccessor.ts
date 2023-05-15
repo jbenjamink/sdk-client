@@ -44,6 +44,8 @@ export default class BaseModelAccessor implements ModelAccessor {
 
   storedPromise = new AccessorPromise(() => {});
 
+  typedList: BaseModelInstance<any>[] = [];
+
   // then = (...args: any[]) => this.storedPromise.then(...args);
 
   constructor(root: ClientInterface, props?: BaseModelAccessor) {
@@ -81,22 +83,28 @@ export default class BaseModelAccessor implements ModelAccessor {
 
   from = (...args: any[]) => this.storedPromise.from(args[0], args[1], args[2]);
 
-  list = (limit?: number): AccessorPromise => {
+  list(limit?: number): AccessorPromise {
     if (limit) return this.some(limit);
-    return AccessorPromise.fromPromise(fetcher.get(this.getPath()))
+    let res = AccessorPromise.fromPromise(fetcher.get(this.getPath()))
       .from(this.list, this, this.root)
-      .as(undefined, this.list.name, false)
+      .as(undefined, 'list', false)
       .process();
-  };
+    return res;
+  }
 
-  first = (next?: string, as?: string) => {
+  first(next?: string, as?: string) {
     const baseReturn = AccessorPromise.fromPromise(
-      this.list().then((result: any) => {
-        const cleanedReult = clean(result);
-        const first = cleanedReult.length > 0 ? cleanedReult[0] : null;
-        return this.wrap(first);
-      })
+      this.list()
+        .then((result: any) => {
+          const cleanedReult = clean(result);
+          const first = cleanedReult.length > 0 ? cleanedReult[0] : null;
+          return this.wrap(first);
+        })
+        .from(this.first, this, this.root)
+        .as(undefined, 'first', false)
+        .process()
     );
+
     switch (next) {
       case 'as':
         return baseReturn.as(as || 'first', undefined, true);
@@ -104,7 +112,7 @@ export default class BaseModelAccessor implements ModelAccessor {
       default:
         return baseReturn;
     }
-  };
+  }
 
   last = (ignoreAs?: string, as?: string) => {
     return AccessorPromise.fromPromise(
