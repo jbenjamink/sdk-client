@@ -6,7 +6,7 @@ import AccessorPromise from './AccessorPromise';
 import Users from './Users';
 import WebhookEvents from './WebhookEvents';
 
-export default {
+export {
   BaseModelAccessor,
   WebhookEvents,
   NoOpPromise,

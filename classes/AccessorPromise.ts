@@ -1,12 +1,12 @@
 /* eslint-disable no-param-reassign */
-import cache, { Cache } from '@lib/sdk-client/cache';
+import cache, { Cache } from '@sdk-client/cache';
 import {
   ModelAccessor,
   ClientInterface,
   Skippable
-} from '@lib/sdk-client/interfaces';
-import { AnyFunction } from '@lib/sdk-client/types';
-import { clean } from '@lib/sdk-client/utils';
+} from '@sdk-client/interfaces';
+import { AnyFunction } from '@sdk-client/types';
+import { clean } from '@sdk-client/utils';
 
 import NoOpPromise from './NoOpPromise';
 

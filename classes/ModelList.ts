@@ -1,4 +1,4 @@
-import { ModelInstance, ClientInterface } from '@lib/sdk-client/interfaces';
+import { ModelInstance, ClientInterface } from '@sdk-client/interfaces';
 
 import BaseAccessor from './BaseModelAccessor';
 import Label from './ModelClasses/Label';

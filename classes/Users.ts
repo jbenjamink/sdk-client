@@ -1,17 +1,22 @@
-import { ModelAccessor, ClientInterface } from '@lib/sdk-client/interfaces';
-import fetcher from '@utils/fetcher';
+import { ModelAccessor, ClientInterface } from '@sdk-client/interfaces';
+import fetcher from '@sdk-client/classes/Fetchers/fetcher';
 
-import BaseModel from './BaseModelAccessor';
+import BaseModelAccessor from './BaseModelAccessor';
 import User from './ModelClasses/User';
+import BaseModelInstance from './ModelClasses/BaseModelInstance';
 
-export default class Users extends BaseModel {
+export default class Users extends BaseModelAccessor<User> {
   uuid = '';
 
   routePath = '/users';
 
   parent?: ModelAccessor;
 
-  constructor(root: ClientInterface, parent?: BaseModel, props?: BaseModel) {
+  constructor(
+    root: ClientInterface,
+    parent?: BaseModelAccessor<BaseModelInstance<any>>,
+    props?: any
+  ) {
     super(root, props);
     this.parent = parent?.parent;
     this.model = User;

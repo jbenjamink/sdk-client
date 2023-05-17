@@ -1,8 +1,10 @@
-import cache, { Cache } from '@lib/sdk-client/cache';
-import { CacheBase, ClientInterface } from '@lib/sdk-client/interfaces';
-import { AnyFunction, ConfigProps, Credentials } from '@lib/sdk-client/types';
-import fetcher, { RequestCallData } from '@utils/fetcher';
-import trpcFetcher from '@utils/trpcFetcher';
+import cache, { Cache } from '@sdk-client/cache';
+import { ClientInterface } from '@sdk-client/interfaces';
+import { AnyFunction, ConfigProps, Credentials } from '@sdk-client/types';
+import fetcher, {
+  RequestCallData
+} from '@sdk-client/classes/Fetchers/trpcFetcher';
+import trpcFetcher from '@sdk-client/classes/Fetchers/trpcFetcher';
 import AliasMap from './UtilityClasses/AliasMap';
 
 import BaseModelAccessor from './BaseModelAccessor';
@@ -10,7 +12,7 @@ import Tasks from './Tasks';
 import Labels from './Labels';
 
 type FilterMethods<T> = {
-  [K in keyof T]: T[K] extends BaseModelAccessor ? never : K;
+  [K in keyof T]: T[K] extends BaseModelAccessor<T> ? never : K;
 }[keyof T];
 
 type ClientInterfaceProperties = FilterMethods<ClientInterface>;
@@ -91,7 +93,6 @@ export default class Client implements ClientInterface {
         headers,
         method,
         response,
-        clonedResponse,
         responseBody
       }: RequestCallData) => {
         this.cacheRequest({
@@ -101,7 +102,6 @@ export default class Client implements ClientInterface {
           headers,
           method,
           response,
-          clonedResponse,
           responseBody
         });
         console.log('stored', response);

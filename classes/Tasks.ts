@@ -1,11 +1,11 @@
-import { ModelAccessor, ClientInterface } from '@lib/sdk-client/interfaces';
+import { ModelAccessor, ClientInterface } from '@sdk-client/interfaces';
 
-import BaseAccessor from './BaseModelAccessor';
+import BaseModelAccessor from './BaseModelAccessor';
 import Task from './ModelClasses/Task';
 
 export type TaskList<T extends Task> = T[];
 
-export default class Tasks extends BaseAccessor {
+export default class Tasks extends BaseModelAccessor<Task> {
   uuid = '';
 
   routePath = '/tasks/';
@@ -14,7 +14,7 @@ export default class Tasks extends BaseAccessor {
 
   taskList: TaskList<Task> = [];
 
-  constructor(root: ClientInterface, props?: BaseAccessor) {
+  constructor(root: ClientInterface, props?: any) {
     super(root, props);
     this.parent = props?.parent;
     this.model = Task;

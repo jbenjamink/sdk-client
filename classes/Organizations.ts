@@ -1,13 +1,13 @@
-import { ClientInterface } from '@lib/sdk-client/interfaces';
+import { ClientInterface } from '@sdk-client/interfaces';
 
-import BaseAccessor from './BaseModelAccessor';
+import BaseModelAccessor from './BaseModelAccessor';
 
-export default class Organizations extends BaseAccessor {
+export default class Organizations extends BaseModelAccessor<Organizations> {
   uuid: string;
 
   routePath = '/organizations';
 
-  constructor(root: ClientInterface, uuid = '', props?: BaseAccessor) {
+  constructor(root: ClientInterface, uuid = '', props?: any) {
     super(root, props);
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     this.uuid = uuid;

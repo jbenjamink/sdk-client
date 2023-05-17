@@ -2,9 +2,9 @@ import {
   ModelAccessor,
   ModelInstance,
   Skippable
-} from '@lib/sdk-client/interfaces';
-import { skipped } from '@lib/sdk-client/utils';
-import fetcher from '@utils/fetcher';
+} from '@sdk-client/interfaces';
+import { skipped } from '@sdk-client/utils';
+import fetcher from '@sdk-client/classes/Fetchers/fetcher';
 
 import AccessorPromise from '../AccessorPromise';
 import ModelList from '../ModelList';

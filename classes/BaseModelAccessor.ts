@@ -1,19 +1,19 @@
-import cache, { Cache } from '@lib/sdk-client/cache';
+import cache, { Cache } from '../cache';
 import {
   ModelAccessor,
   ModelInstance,
   ClientInterface,
   Skippable
-} from '@lib/sdk-client/interfaces';
-import { AnyFunction } from '@lib/sdk-client/types';
-import { clean, skipped } from '@lib/sdk-client/utils';
-import fetcher from '@utils/trpcFetcher';
+} from '../interfaces';
+import { AnyFunction } from '@sdk-client/types';
+import { clean, skipped } from '@sdk-client/utils';
+import fetcher from '@sdk-client/classes/Fetchers/trpcFetcher';
 
 import BaseModelInstance from './ModelClasses/BaseModelInstance';
 import NoOpPromise from './NoOpPromise';
 import AccessorPromise from './AccessorPromise';
 
-export default class BaseModelAccessor implements ModelAccessor {
+export default class BaseModelAccessor<T> implements ModelAccessor {
   root: ClientInterface;
 
   uuid: string;
@@ -48,7 +48,7 @@ export default class BaseModelAccessor implements ModelAccessor {
 
   // then = (...args: any[]) => this.storedPromise.then(...args);
 
-  constructor(root: ClientInterface, props?: BaseModelAccessor) {
+  constructor(root: ClientInterface, props?: any) {
     this.root = root;
     this.uuid = '';
     this.routePath = '';
@@ -114,7 +114,7 @@ export default class BaseModelAccessor implements ModelAccessor {
     }
   }
 
-  last = (ignoreAs?: string, as?: string) => {
+  last = (ignoreAs?: string, as?: string): AccessorPromise => {
     return AccessorPromise.fromPromise(
       this.list().then((result: any) => {
         const cleanedReult = clean(result);
@@ -127,7 +127,7 @@ export default class BaseModelAccessor implements ModelAccessor {
     ).as(as || 'last', typeof this);
   };
 
-  some = (limit: number, as?: string) => {
+  some = (limit: number, as?: string): AccessorPromise => {
     return AccessorPromise.fromPromise(
       this.list().then((result: any) => {
         const cleanedReult = clean(result);
@@ -219,7 +219,7 @@ export default class BaseModelAccessor implements ModelAccessor {
     return this;
   };
 
-  wrap = (data: any) => {
+  wrap = (data: any): BaseModelInstance<typeof this.model> => {
     const Instance = this.model;
     return new Instance(this, data);
   };

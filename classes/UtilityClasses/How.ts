@@ -1,4 +1,4 @@
-import { ClientInterface } from '@lib/sdk-client/interfaces';
+import { ClientInterface } from '@sdk-client/interfaces';
 
 export default class How {
   source: ClientInterface;
