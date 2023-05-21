@@ -1,0 +1,38 @@
+{
+  "name": "sdk-client",
+  "version": "1.0.0",
+  "description": "A client-side SDK for interfacing with an arbitrary API",
+  "main": "dist/index.js",
+  "scripts": {
+    "prebuild": "rimraf ./dist",
+    "_build": "tsc && tsc-alias",
+    "__build": "tsconfig-paths register --project ./tsconfig.json && tsc",
+    "build": "tsc --project tsconfig.json && tsconfig-replace-paths --project tsconfig.json",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "debug": "nodemon --watch src --exec npm run build",
+    "watch": "chokidar 'src/**/*.ts*' -c 'npm run build'"
+  },
+  "bin": {
+    "sdk-client": "./bin/index.js"
+  },
+  "keywords": [
+    "sdk",
+    "client"
+  ],
+  "author": "jbenjamink",
+  "license": "ISC",
+  "devDependencies": {
+    "@jbenjamink/sdk-client-interface-types": "file:../@types/sdk-client-interface",
+    "chokidar": "^3.5.3",
+    "rimraf": "^5.0.0",
+    "ts-loader": "^9.4.2",
+    "ts-morph": "^18.0.0",
+    "tsc-alias": "^1.8.6",
+    "tsconfig-paths": "^4.2.0",
+    "tsconfig-paths-webpack-plugin": "^4.0.1",
+    "tsconfig-replace-paths": "^0.0.14",
+    "typedoc": "^0.24.7",
+    "webpack": "^5.82.1",
+    "webpack-cli": "^5.1.1"
+  }
+}

@@ -1,5 +1,12 @@
-export default class NoOpPromise extends Promise<any> {
-  noOp() {
+export default class NoOpPromise<T = void>
+  extends Promise<T>
+  implements INoOpPromise
+{
+  constructor() {
+    super(() => {});
+  }
+
+  noOp(): INoOpPromise {
     return this;
   }
 

@@ -7,6 +7,7 @@ export const clean = (result: any) => {
     : result;
 };
 
+/* @deprecated */
 export const skipped = (): NoOpPromise => {
   return AccessorPromise.noOp();
 };

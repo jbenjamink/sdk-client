@@ -1,10 +1,4 @@
-import Client from './classes/Client';
-
-declare global {
-  interface Window {
-    Client: typeof Client;
-  }
-}
+import Client from '@sdk-client/classes/Client';
 
 const instance = new Client();
 

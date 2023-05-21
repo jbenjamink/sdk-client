@@ -5,9 +5,8 @@ import {
 } from '@sdk-client/interfaces';
 import { skipped } from '@sdk-client/utils';
 import fetcher from '@sdk-client/classes/Fetchers/fetcher';
-
-import AccessorPromise from '../AccessorPromise';
-import ModelList from '../ModelList';
+import AccessorPromise from '@sdk-client/classes/AccessorPromise';
+import ModelList from '@sdk-client/classes/ModelList';
 
 export default class BaseModelInstance<T> implements ModelInstance {
   uuid: string;

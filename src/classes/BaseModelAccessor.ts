@@ -1,10 +1,4 @@
 import cache, { Cache } from '../cache';
-import {
-  ModelAccessor,
-  ModelInstance,
-  ClientInterface,
-  Skippable
-} from '../interfaces';
 import { AnyFunction } from '@sdk-client/types';
 import { clean, skipped } from '@sdk-client/utils';
 import fetcher from '@sdk-client/classes/Fetchers/trpcFetcher';
@@ -13,14 +7,14 @@ import BaseModelInstance from './ModelClasses/BaseModelInstance';
 import NoOpPromise from './NoOpPromise';
 import AccessorPromise from './AccessorPromise';
 
-export default class BaseModelAccessor<T> implements ModelAccessor {
+export default class BaseModelAccessor<T> implements ModelAccessor<T> {
   root: ClientInterface;
 
   uuid: string;
 
   routePath: string;
 
-  parent?: ModelAccessor;
+  parent?: ModelAccessor<ModelInstance<any>>;
 
   model = BaseModelInstance;
 
@@ -42,7 +36,7 @@ export default class BaseModelAccessor<T> implements ModelAccessor {
 
   printResult = false;
 
-  storedPromise = new AccessorPromise(() => {});
+  storedPromise = new AccessorPromise<T>(() => {});
 
   typedList: BaseModelInstance<any>[] = [];
 
@@ -83,7 +77,7 @@ export default class BaseModelAccessor<T> implements ModelAccessor {
 
   from = (...args: any[]) => this.storedPromise.from(args[0], args[1], args[2]);
 
-  list(limit?: number): AccessorPromise {
+  list(limit?: number): AccessorPromise<any> {
     if (limit) return this.some(limit);
     let res = AccessorPromise.fromPromise(fetcher.get(this.getPath()))
       .from(this.list, this, this.root)
@@ -114,8 +108,11 @@ export default class BaseModelAccessor<T> implements ModelAccessor {
     }
   }
 
-  last = (ignoreAs?: string, as?: string): AccessorPromise => {
-    return AccessorPromise.fromPromise(
+  last = (
+    ignoreAs?: string,
+    as?: string
+  ): AccessorPromise<BaseModelInstance<T>> => {
+    return AccessorPromise.fromPromise<BaseModelInstance<T>>(
       this.list().then((result: any) => {
         const cleanedReult = clean(result);
         const last =
@@ -127,8 +124,11 @@ export default class BaseModelAccessor<T> implements ModelAccessor {
     ).as(as || 'last', typeof this);
   };
 
-  some = (limit: number, as?: string): AccessorPromise => {
-    return AccessorPromise.fromPromise(
+  some = (
+    limit: number,
+    as?: string
+  ): AccessorPromise<BaseModelAccessor<T>[]> => {
+    return AccessorPromise.fromPromise<BaseModelAccessor<T>[]>(
       this.list().then((result: any) => {
         const cleanedReult = clean(result);
         return cleanedReult.slice(0, limit).map((item: any) => this.wrap(item));

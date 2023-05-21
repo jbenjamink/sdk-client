@@ -1,0 +1,47 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "sourceMap": true,
+    "target": "es2018",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": false,
+    "declaration": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@sdk-client/*": ["./*"],
+      "@sdk-client/cache": ["./cache"],
+      "@sdk-client/utils": ["./utils"],
+      "@sdk-client/classes/*": ["./classes/*"],
+      "@sdk-client/lib/*": ["./lib/*"],
+      "*": ["node_modules/*"]
+    },
+    "lib": ["dom", "dom.iterable", "esnext"]
+  },
+  "tsc-alias": {
+    "verbose": false,
+    "resolveFullPaths": true,
+    "replacers": {},
+    "fileExtensions": {
+      "inputGlob": "js,jsx,mjs",
+      "outputCheck": ["js", "json", "jsx", "mjs"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "globals.d.ts",
+    "node_modules/@jbenjamink/sdk-client-interface-types/index.d.ts"
+  ]
+  // "exclude": ["node_modules"]
+}

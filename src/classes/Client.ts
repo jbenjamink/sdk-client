@@ -22,6 +22,9 @@ type MethodReturnTypeMap<T extends keyof Client, M extends keyof Client[T]> = {
 };
 
 export default class Client implements ClientInterface {
+  description: string =
+    'This is an SDK client instance which interfaces with a task management system';
+
   tasks: Tasks;
 
   labels: Labels;
@@ -51,6 +54,7 @@ export default class Client implements ClientInterface {
 
   cache: Cache;
 
+  /* Retrieve a value from the cache */
   get = (key: string) => this.cache.get(key);
 
   set = (key: string, value: unknown) => {
@@ -124,7 +128,7 @@ export default class Client implements ClientInterface {
     organization,
     settings,
     accessToken
-  }: ConfigProps) => {
+  }: ConfigProps): typeof this => {
     if (isLoggedIn) this.authentication.authenticated = true;
     if (accessToken) this.authentication.token = accessToken;
     if (organization) {

@@ -1,19 +1,17 @@
 /* eslint-disable no-param-reassign */
 import cache, { Cache } from '@sdk-client/cache';
-import {
-  ModelAccessor,
-  ClientInterface,
-  Skippable
-} from '@sdk-client/interfaces';
 import { AnyFunction } from '@sdk-client/types';
 import { clean } from '@sdk-client/utils';
 
-import NoOpPromise from './NoOpPromise';
+import NoOpPromise from '@sdk-client/classes/NoOpPromise';
 
-export default class AccessorPromise extends Promise<any> {
+export default class AccessorPromise<T>
+  extends Promise<T>
+  implements IAccessorPromise<T>
+{
   lastCaller: Skippable | null = null;
 
-  accessor?: ModelAccessor;
+  accessor?: ModelAccessor<T>;
 
   sdk?: ClientInterface;
 
@@ -23,37 +21,65 @@ export default class AccessorPromise extends Promise<any> {
 
   typedValue: any;
 
-  then<TResult, TError>(
+  constructor(
+    executor: (
+      resolve: (value: T | PromiseLike<T>) => void,
+      reject: (reason?: any) => void
+    ) => void
+  ) {
+    super(executor);
+  }
+
+  then<TResult1 = T, TResult2 = never>(
     onfulfilled?:
-      | ((value: any) => TResult | PromiseLike<TResult>)
+      | ((value: T) => TResult1 | PromiseLike<TResult1>)
       | null
       | undefined,
     onrejected?:
-      | ((reason: any) => TError | PromiseLike<TError>)
+      | ((reason: any) => TResult2 | PromiseLike<TResult2>)
       | null
       | undefined
-  ): AccessorPromise {
-    super.then((value: any) => {
-      let typedValue = this.typedValue || value;
+  ): AccessorPromise<TResult1 | TResult2> {
+    return new AccessorPromise((resolve, reject) => {
+      super
+        .then((value: any) => {
+          let typedValue = this.typedValue || value;
 
-      if (!this.processed && this.accessor?.model) {
-        const ModelConstructor = this.accessor.model;
-        const { typedList } = this.accessor;
-        if (Array.isArray(value)) {
-          typedValue = ModelConstructor.listOf(this.accessor, value);
-        } else {
-          typedValue = new ModelConstructor(this.accessor!, value);
-        }
-        this.processed = true;
-        this.typedValue = typedValue;
-      }
+          if (!this.processed && this.accessor?.model) {
+            const ModelConstructor = this.accessor.model;
+            const { typedList } = this.accessor;
+            if (Array.isArray(value)) {
+              typedValue = ModelConstructor.listOf(this.accessor, value);
+            } else {
+              typedValue = new ModelConstructor(this.accessor!, value);
+            }
+            this.processed = true;
+            this.typedValue = typedValue;
+          }
+          if (onfulfilled) {
+            return onfulfilled(typedValue);
+          }
+          return typedValue;
+        }, onrejected)
+        .then(resolve, reject);
+    });
+  }
 
-      if (onfulfilled) {
-        return onfulfilled(typedValue);
-      }
-      return typedValue as any as TResult;
-    }, onrejected);
-    return this;
+  catch<TResult = never>(
+    onrejected?:
+      | ((reason: any) => TResult | PromiseLike<TResult>)
+      | null
+      | undefined
+  ): AccessorPromise<T | TResult> {
+    return new AccessorPromise((resolve, reject) => {
+      super.catch(onrejected).then(resolve, reject);
+    });
+  }
+
+  finally(onfinally?: (() => void) | null | undefined): AccessorPromise<T> {
+    return new AccessorPromise((resolve, reject) => {
+      super.finally(onfinally).then(resolve, reject);
+    });
   }
 
   as(cacheKey?: string, caller?: string, returnAccessor = false): this {
@@ -66,9 +92,9 @@ export default class AccessorPromise extends Promise<any> {
 
   cacheTo = this.as;
 
-  result: ModelAccessor | undefined;
+  result: ModelAccessor<T> | undefined;
 
-  process(callback?: AnyFunction) {
+  process(callback?: AnyFunction): this {
     this.then((result: any) => {
       const data = clean(result);
       // const ModelConstructor = this.accessor?.model;
@@ -112,7 +138,7 @@ export default class AccessorPromise extends Promise<any> {
 
   to = this.set;
 
-  disable(m: ModelAccessor, f: Skippable, shouldDisable: boolean) {
+  disable(m: ModelAccessor<T>, f: Skippable, shouldDisable: boolean) {
     if (shouldDisable) {
       f.skip = true;
       m.doNextCallOnce = false;
@@ -120,7 +146,7 @@ export default class AccessorPromise extends Promise<any> {
     return this;
   }
 
-  from(fn: any, m?: ModelAccessor, i?: ClientInterface) {
+  from(fn: any, m?: ModelAccessor<T>, i?: ClientInterface) {
     this.lastCaller = fn;
     this.accessor = m;
     this.sdk = i;
@@ -138,14 +164,14 @@ export default class AccessorPromise extends Promise<any> {
     return this;
   }
 
-  static fromPromise(promise: Promise<any>) {
+  static fromPromise<T>(promise: Promise<any>) {
     return new AccessorPromise((resolve: any, reject: any) => {
       promise.then(resolve).catch(reject);
-    });
+    }) as AccessorPromise<T>;
   }
 
   static noOp() {
-    return new NoOpPromise((resolve: any) => resolve());
+    return new NoOpPromise();
   }
 
   toString() {
