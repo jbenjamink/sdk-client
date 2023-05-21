@@ -1,4 +1,3 @@
-import { ClientInterface, ModelAccessor } from '@sdk-client/interfaces';
 import fetcher from '@sdk-client/classes/Fetchers/fetcher';
 
 import BaseModelAccessor from './BaseModelAccessor';
@@ -11,7 +10,7 @@ export default class Integrations extends BaseModelAccessor<Integrations> {
 
   routePath = '/integrations';
 
-  parent?: ModelAccessor;
+  parent?: ModelAccessor<ModelInstance<any>>;
 
   sync: () => Promise<unknown>;
 

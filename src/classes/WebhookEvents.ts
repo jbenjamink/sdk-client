@@ -1,5 +1,3 @@
-import { ClientInterface, ModelAccessor } from '@sdk-client/interfaces';
-
 import BaseModelAccessor from './BaseModelAccessor';
 import WebhookEvent from './ModelClasses/WebhookEvent';
 
@@ -8,7 +6,7 @@ export default class WebhookEvents extends BaseModelAccessor<WebhookEvent> {
 
   routePath = '/webhooks/events';
 
-  parent?: ModelAccessor;
+  parent?: ModelAccessor<ModelInstance<any>>;
 
   constructor(root: ClientInterface, props?: any) {
     super(root, props);

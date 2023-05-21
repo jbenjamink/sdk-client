@@ -1,4 +1,3 @@
-import { ModelAccessor, ClientInterface } from '@sdk-client/interfaces';
 import fetcher from '@sdk-client/classes/Fetchers/fetcher';
 
 import BaseModelAccessor from './BaseModelAccessor';
@@ -10,7 +9,7 @@ export default class Users extends BaseModelAccessor<User> {
 
   routePath = '/users';
 
-  parent?: ModelAccessor;
+  parent?: ModelAccessor<ModelInstance<any>>;
 
   constructor(
     root: ClientInterface,

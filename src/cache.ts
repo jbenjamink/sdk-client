@@ -1,11 +1,9 @@
-import { Cache as CacheInterface, CacheBase } from './interfaces';
-
 type CallableCache = {
   (): void;
 } & Cache;
 
-export class Cache implements CacheInterface {
-  data: CacheBase;
+export class Cache implements ICache {
+  data: ICacheBase;
 
   get(key: string) {
     return this.data[key];

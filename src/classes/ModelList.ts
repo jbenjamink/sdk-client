@@ -1,13 +1,11 @@
-import { ModelInstance, ClientInterface } from '@sdk-client/interfaces';
-
 import BaseAccessor from './BaseModelAccessor';
 import Label from './ModelClasses/Label';
 import BaseModelInstance from './ModelClasses/BaseModelInstance';
 import Task from './ModelClasses/Task';
 
-export type ModelArray<T extends ModelInstance> = ModelInstance[];
+export type ModelArray<T extends ModelInstance<T>> = ModelInstance<T>[];
 
-export default class ModelList<T extends ModelInstance> extends Array<T> {
+export default class ModelList<T extends ModelInstance<T>> extends Array<T> {
   constructor(...values: T[]) {
     super();
     super.push(...values);

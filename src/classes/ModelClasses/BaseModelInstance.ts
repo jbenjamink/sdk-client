@@ -1,25 +1,19 @@
-import {
-  ModelAccessor,
-  ModelInstance,
-  Skippable
-} from '@sdk-client/interfaces';
-import { skipped } from '@sdk-client/utils';
 import fetcher from '@sdk-client/classes/Fetchers/fetcher';
 import AccessorPromise from '@sdk-client/classes/AccessorPromise';
 import ModelList from '@sdk-client/classes/ModelList';
 
-export default class BaseModelInstance<T> implements ModelInstance {
+export default class BaseModelInstance<T> implements ModelInstance<T> {
   uuid: string;
 
   routePath: string;
 
-  accessor?: ModelAccessor;
+  accessor?: ModelAccessor<T>;
 
   storable?: unknown;
 
   data: any;
 
-  constructor(accessor: ModelAccessor, data: any) {
+  constructor(accessor: ModelAccessor<T>, data: any) {
     this.accessor = accessor;
     this.uuid = data?.uuid;
     this.routePath = `${accessor.routePath}/${data.uuid}`;
@@ -66,8 +60,8 @@ export default class BaseModelInstance<T> implements ModelInstance {
   };
 
   static listOf<T extends BaseModelInstance<any>>(
-    this: { new (accessor: ModelAccessor, data: any): T },
-    accessor: ModelAccessor,
+    this: { new (accessor: ModelAccessor<T>, data: any): T },
+    accessor: ModelAccessor<T>,
     data: any
   ): ModelList<T> {
     const mapped = data.map((item: any) => {

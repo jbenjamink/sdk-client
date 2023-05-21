@@ -1,5 +1,3 @@
-import { ClientInterface } from '@sdk-client/interfaces';
-
 import BaseModelAccessor from './BaseModelAccessor';
 
 export default class Organizations extends BaseModelAccessor<Organizations> {

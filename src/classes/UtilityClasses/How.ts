@@ -1,5 +1,3 @@
-import { ClientInterface } from '@sdk-client/interfaces';
-
 export default class How {
   source: ClientInterface;
 

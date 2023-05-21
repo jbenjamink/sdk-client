@@ -1,5 +1,3 @@
-import { ModelAccessor, ClientInterface } from '@sdk-client/interfaces';
-
 import BaseModelAccessor from './BaseModelAccessor';
 import Task from './ModelClasses/Task';
 
@@ -10,7 +8,7 @@ export default class Tasks extends BaseModelAccessor<Task> {
 
   routePath = '/tasks/';
 
-  parent?: ModelAccessor;
+  parent?: ModelAccessor<ModelInstance<any>>;
 
   taskList: TaskList<Task> = [];
 

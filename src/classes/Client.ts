@@ -1,5 +1,4 @@
 import cache, { Cache } from '@sdk-client/cache';
-import { ClientInterface } from '@sdk-client/interfaces';
 import { AnyFunction, ConfigProps, Credentials } from '@sdk-client/types';
 import fetcher, {
   RequestCallData
@@ -14,8 +13,6 @@ import Labels from './Labels';
 type FilterMethods<T> = {
   [K in keyof T]: T[K] extends BaseModelAccessor<T> ? never : K;
 }[keyof T];
-
-type ClientInterfaceProperties = FilterMethods<ClientInterface>;
 
 type MethodReturnTypeMap<T extends keyof Client, M extends keyof Client[T]> = {
   [key in T]: () => ReturnType<Client[key][M]>;
@@ -67,6 +64,8 @@ export default class Client implements ClientInterface {
   }
 
   dispatch: AnyFunction;
+
+  await = () => this;
 
   static fetcher = trpcFetcher;
 

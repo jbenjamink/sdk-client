@@ -1,5 +1,3 @@
-import { ModelAccessor, ClientInterface } from '@sdk-client/interfaces';
-
 import BaseModelAccessor from './BaseModelAccessor';
 import Label from './ModelClasses/Label';
 
@@ -8,7 +6,7 @@ export default class Labels extends BaseModelAccessor<Label> {
 
   routePath = '/labels/';
 
-  parent?: ModelAccessor;
+  parent?: ModelAccessor<ModelInstance<any>>;
 
   constructor(root: ClientInterface, props?: any) {
     super(root, props);
